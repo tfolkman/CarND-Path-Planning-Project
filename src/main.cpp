@@ -260,6 +260,16 @@ int main() {
                 if ((check_car_s > car_s) && ((check_car_s - car_s) < 30)){
                   std::cout << "Too close!!!" << std::endl;
                   too_close = true;
+
+                  // lane change
+
+                  if (lane == 0){
+                    lane = 1;
+                  } else if (lane == 2){
+                    lane = 1;
+                  } else {
+                    lane = 0;
+                  }
                 }
               }
             }

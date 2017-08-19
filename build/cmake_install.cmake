@@ -1,4 +1,4 @@
-# Install script for directory: /Users/tylerfolkman/projects/carnd/CarND-Path-Planning-Project
+# Install script for directory: /Users/tylerfolkman/projects/carND/CarND-Path-Planning-Project
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -35,5 +35,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/tylerfolkman/projects/carnd/CarND-Path-Planning-Project/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/Users/tylerfolkman/projects/carND/CarND-Path-Planning-Project/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

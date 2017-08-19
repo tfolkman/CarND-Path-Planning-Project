@@ -160,6 +160,20 @@ vector<double> getXY(double s, double d, vector<double> maps_s, vector<double> m
 
 }
 
+bool checkLane(int laneToCheck, int car_s, vector<int> other_cars_lanes, vector<double> other_cars_s){
+  for (int i = 0; i < other_cars_lanes.size(); i++){
+    int c_lane = other_cars_lanes.at(i);
+    int c_s = other_cars_s.at(i);
+    if (c_lane == laneToCheck){
+      int abs_diff = abs(c_s - car_s);
+      if (abs_diff < 15){
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
 int main() {
   uWS::Hub h;
 
@@ -246,29 +260,51 @@ int main() {
             }
 
             bool too_close = false;
+            vector<int> other_cars_lane;
+            vector<double> other_cars_s;
 
             for (int i = 0; i < sensor_fusion.size(); i++){
               float d = sensor_fusion[i][6];
-              if (d < (2+4*lane+2) && d > (2+4*lane-2)){
-                double vx = sensor_fusion[i][3];
-                double vy = sensor_fusion[i][4];
-                double check_speed = sqrt(vx*vx + vy*vy);
-                double check_car_s = sensor_fusion[i][5];
+              int other_lane = 0;
+              if (d < (2+4*1+2) && d > (2+4*1-2)){
+                other_lane = 1;
+              } else if (d < (2+4*2+2) && d > (2+4*2-2)){
+                other_lane = 2;
+              }
+              double vx = sensor_fusion[i][3];
+              double vy = sensor_fusion[i][4];
+              double check_speed = sqrt(vx*vx + vy*vy);
+              double check_car_s = sensor_fusion[i][5];
 
-                check_car_s += ((double)prev_size *.02*check_speed);
+              check_car_s += ((double)prev_size *.02*check_speed);
 
-                if ((check_car_s > car_s) && ((check_car_s - car_s) < 30)){
-                  std::cout << "Too close!!!" << std::endl;
+              other_cars_lane.push_back(other_lane);
+              other_cars_s.push_back(check_car_s);
+            }
+
+            for (int i = 0; i < other_cars_lane.size(); i++){
+              int c_lane = other_cars_lane.at(i);
+              double c_s = other_cars_s.at(i);
+              if (lane == c_lane){
+                if ((c_s > car_s) && ((c_s - car_s) < 30)){
                   too_close = true;
 
-                  // lane change
+                  // try and change lane change
 
                   if (lane == 0){
-                    lane = 1;
+                    if (checkLane(1, car_s, other_cars_lane, other_cars_s)){
+                      lane = 1;
+                    }
                   } else if (lane == 2){
-                    lane = 1;
+                    if (checkLane(1, car_s, other_cars_lane, other_cars_s)){
+                      lane = 1;
+                    }
                   } else {
-                    lane = 0;
+                    if (checkLane(0, car_s, other_cars_lane, other_cars_s)){
+                      lane = 0;
+                    } else if (checkLane(2, car_s, other_cars_lane, other_cars_s)){
+                      lane = 2;
+                    }
                   }
                 }
               }

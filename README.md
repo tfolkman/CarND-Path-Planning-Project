@@ -1,5 +1,13 @@
 # CarND-Path-Planning-Project
 Self-Driving Car Engineer Nanodegree Program
+
+### Reflection
+
+The model that I built is based heavily upon the steps outlined in the walk through. First, I set the reference velocity to zero. This allows me to slowly accelerate and avoid jerking the car. I continue to increase my speed by 0.224 MPH until I reach my maximum speed of 49.5 MPH. Also, at the beginning of each iteration, I cache all the other car's locations and speeds. I then check if I am within 30 meters of the car in front of me. If this is the case, I slow down at a rate of 0.224 MPH per iteration. Also, once I find a car in front of me, I check to see if I can change lanes. I wrote a checkLane function that determines if there is a car within +- 15 meters of me in the lane I want to navigate into. If there is, I don't switch lanes or I check the other lane if I am in the middle lane. If there is not, then I switch lanes. The middle lane always tries to get into the fast lane first.
+
+Once I determine the lane I wanted to be in and at what speed, I used Frenet coordinates and splines to plan my path. Frenet coordinates were extremely useful because I could always set d to be in the middle of the desired lane and change the s to move the car forward at the desired speed. If I had a previous path, I would start my spline interpolation from the last two points of my previous path; otherwise, the car's current position. From there, I got the x, y coordinates for 30, 60, and 90 meters along the s dimension. This wide spacing allowed the spline to be nice and smooth. Once I calculated the spline, I split it into evenly spaced points that would move the car forward approximately 30 meters and maintain the reference velocity. With this implementation I was able to navigate the road for 4.32 miles without incident.
+
+
    
 ### Simulator.
 You can download the Term3 Simulator which contains the Path Planning Project from the [releases tab (https://github.com/udacity/self-driving-car-sim/releases).

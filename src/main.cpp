@@ -166,7 +166,7 @@ bool checkLane(int laneToCheck, int car_s, vector<int> other_cars_lanes, vector<
     int c_s = other_cars_s.at(i);
     if (c_lane == laneToCheck){
       int abs_diff = abs(c_s - car_s);
-      if (abs_diff < 15){
+      if (abs_diff < 20){
         return false;
       }
     }
@@ -286,7 +286,7 @@ int main() {
               int c_lane = other_cars_lane.at(i);
               double c_s = other_cars_s.at(i);
               if (lane == c_lane){
-                if ((c_s > car_s) && ((c_s - car_s) < 30)){
+                if ((c_s > car_s) && ((c_s - car_s) < 50)){
                   too_close = true;
 
                   // try and change lane change
